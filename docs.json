@@ -9,64 +9,63 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "tabs": [
+    "languages": [
       {
-        "tab": "RapidUI",
-        "groups": [
+        "language": "en",
+        "tabs": [
           {
-            "group": "Get Started",
-            "pages": [
-              "rapidui/get-started/introduction",
-              "rapidui/get-started/quickstart"
+            "tab": "RapidUI",
+            "groups": [
+              {
+                "group": "Getting Started",
+                "pages": ["en/rapidui/get-started/introduction", "en/rapidui/get-started/quickstart"]
+              },
+              {
+                "group": "Components",
+                "pages": ["en/rapidui/components/buttons"]
+              }
             ]
           },
           {
-            "group": "Use",
-            "pages": [
-              "rapidui/get-started/introduction"
+            "tab": "Guides",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "introduction",
+                  "quickstart",
+                  "development"
+                ]
+              },
+              {
+                "group": "Essentials",
+                "pages": [
+                  "essentials/markdown",
+                  "essentials/code",
+                  "essentials/images",
+                  "essentials/settings",
+                  "essentials/navigation",
+                  "essentials/reusable-snippets"
+                ]
+              }
             ]
           }
         ]
       },
       {
-        "tab": "Guides",
-        "groups": [
+        "language": "es",
+        "tabs": [
           {
-            "group": "Get Started",
-            "pages": [
-              "introduction",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Essentials",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint Examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete"
+            "tab": "RapidUI",
+            "groups": [
+              {
+                "group": "Comenzando",
+                "pages": ["es/rapidui/get-started/introduction", "es/rapidui/get-started/quickstart"]
+              },
+              {
+                "group": "Componentes",
+                "pages": ["es/rapidui/components/buttons"]
+              }
             ]
           }
         ]
