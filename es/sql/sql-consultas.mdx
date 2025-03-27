@@ -30,6 +30,8 @@ INNER JOIN departamentos ON empleados.id_departamento = departamentos.id_departa
 
 Esto devuelve solo los empleados que tienen un departamento asignado, es decir, aquellos que tienen una coincidencia en la tabla `departamentos`.
 
+---
+
 ## 2. `LEFT JOIN` (o `LEFT OUTER JOIN`)
 
 **¿Qué hace?** El `LEFT JOIN` devuelve todas las filas de la tabla izquierda y las filas coincidentes de la tabla derecha. Si no hay coincidencia, se rellenan con `NULL`.
@@ -55,6 +57,8 @@ LEFT JOIN departamentos ON empleados.id_departamento = departamentos.id_departam
 ```
 
 Esto devuelve todos los empleados, incluso aquellos que no están asignados a ningún departamento. Para esos empleados, el campo `nombre_departamento` será `NULL`.
+
+---
 
 ## 3. `RIGHT JOIN` (o `RIGHT OUTER JOIN`)
 
@@ -82,7 +86,9 @@ RIGHT JOIN departamentos ON empleados.id_departamento = departamentos.id_departa
 
 Esto devuelve todos los departamentos, incluso aquellos que no tienen empleados asignados. Para esos departamentos, el campo `nombre_empleado` será `NULL`.
 
-4. `FULL JOIN` (o `FULL OUTER JOIN`)
+---
+
+## 4. `FULL JOIN` (o `FULL OUTER JOIN`)
 
 **¿Qué hace?** El `FULL JOIN` devuelve todas las filas de ambas tablas, rellenando con `NULL` donde no hay coincidencia.
 
@@ -107,6 +113,8 @@ FULL JOIN departamentos ON empleados.id_departamento = departamentos.id_departam
 ```
 
 Esto devolverá todas las combinaciones posibles de empleados y departamentos. Si un empleado no tiene departamento asignado, su `nombre_departamento` será `NULL`. Si un departamento no tiene empleados, su `nombre_empleado` será `NULL`.
+
+---
 
 ## Resumen
 
