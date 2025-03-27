@@ -1,0 +1,325 @@
+---
+title: 'Botones'
+description: 'Esta documentación proporciona una visión general de los estilos de botones definidos en el archivo `_buttons.scss`. Los estilos están diseñados para ser utilizados con el framework RapidUI.'
+icon: 'circle'
+---
+
+## Variables
+
+Las siguientes variables se importan del archivo `_variables.scss`:
+
+-   `$ru-font-family`: 'Poppins', sans-serif
+-   `$ru-font-size-base`: 16px
+-   `$ru-white`: #ffffff
+-   `$ru-black`: #000000
+-   `$ru-gray-light`: #f8f9fa
+-   `$ru-gray`: #6c757d
+-   `$ru-gray-dark`: #343a40
+-   `$ru-primary`: #007bff
+-   `$ru-secondary`: #6c757d
+-   `$ru-success`: #28a745
+-   `$ru-danger`: #dc3545
+-   `$ru-warning`: #ffc107
+-   `$ru-info`: #17a2b8
+-   `$ru-border-radius`: 4px
+-   `$ru-border-color`: $ru-gray-light
+-   `$ru-padding-sm`: 0.25rem
+-   `$ru-padding-md`: 0.5rem
+-   `$ru-padding-lg`: 1rem
+-   `$ru-box-shadow`: 0px 2px 4px rgba(0, 0, 0, 0.1)
+
+## Estilos Base del Botón
+
+La clase `.ru-button` define los estilos base para todos los botones:
+
+```scss
+.ru-button {
+	display: inline-block;
+	font-family: $ru-font-family;
+	font-size: $ru-font-size-base;
+	font-weight: 600;
+	padding: $ru-padding-md $ru-padding-lg;
+	border: none;
+	border-radius: $ru-border-radius;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+	text-align: center;
+	box-shadow: $ru-box-shadow;
+
+	&:hover {
+		filter: brightness(90%);
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+}
+```
+
+## Tipos de Botones
+
+Se definen los siguientes tipos de botones:
+
+-   **Botón Primario**: `.ru-button--primary`
+-   **Botón Secundario**: `.ru-button--secondary`
+-   **Botón de Éxito**: `.ru-button--success`
+-   **Botón de Peligro**: `.ru-button--danger`
+-   **Botón de Advertencia**: `.ru-button--warning`
+-   **Botón de Información**: `.ru-button--info`
+-   **Botón Claro**: `.ru-button--light`
+-   **Botón Oscuro**: `.ru-button--dark`
+
+Cada tipo de botón tiene colores de fondo y texto específicos:
+
+```scss
+&--primary {
+	background-color: $ru-primary;
+	color: $ru-white;
+}
+
+&--secondary {
+	background-color: $ru-secondary;
+	color: $ru-white;
+}
+
+&--success {
+	background-color: $ru-success;
+	color: $ru-white;
+}
+
+&--danger {
+	background-color: $ru-danger;
+	color: $ru-white;
+}
+
+&--warning {
+	background-color: $ru-warning;
+	color: $ru-black;
+}
+
+&--info {
+	background-color: $ru-info;
+	color: $ru-white;
+}
+
+&--light {
+	background-color: $ru-gray-light;
+	color: $ru-black;
+	border: 1px solid $ru-border-color;
+}
+
+&--dark {
+	background-color: $ru-gray-dark;
+	color: $ru-white;
+}
+```
+
+## Tamaños de Botones
+
+Se definen los siguientes tamaños de botones:
+
+-   **Botón Pequeño**: `.ru-button--sm`
+-   **Botón Grande**: `.ru-button--lg`
+
+Cada tamaño tiene un padding y tamaño de fuente específico:
+
+```scss
+&--sm {
+	padding: $ru-padding-sm $ru-padding-md;
+	font-size: 0.875rem;
+}
+
+&--lg {
+	padding: $ru-padding-lg $ru-padding-lg;
+	font-size: 1.25rem;
+}
+```
+
+## Botón Deshabilitado
+
+El estilo del botón deshabilitado se define de la siguiente manera:
+
+```scss
+&--disabled {
+	background-color: $ru-gray;
+	color: $ru-white;
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+```
+
+## Botón con Borde
+
+El estilo del botón con borde se define de la siguiente manera:
+
+```scss
+&--outline {
+	background-color: transparent;
+	border: 2px solid currentColor;
+	color: $ru-primary;
+
+	&.ru-button--primary {
+		color: $ru-primary;
+
+		&:hover {
+			background: $ru-primary;
+			border-color: $ru-primary;
+			color: $ru-white;
+		}
+	}
+
+	&.ru-button--secondary {
+		color: $ru-secondary;
+
+		&:hover {
+			background: $ru-secondary;
+			border-color: $ru-secondary;
+			color: $ru-white;
+		}
+	}
+
+	&.ru-button--success {
+		color: $ru-success;
+
+		&:hover {
+			background: $ru-success;
+			border-color: $ru-success;
+			color: $ru-white;
+		}
+	}
+
+	&.ru-button--danger {
+		color: $ru-danger;
+
+		&:hover {
+			background: $ru-danger;
+			border-color: $ru-danger;
+			color: $ru-white;
+		}
+	}
+
+	&.ru-button--warning {
+		color: $ru-warning;
+
+		&:hover {
+			background: $ru-warning;
+			border-color: $ru-warning;
+			color: $ru-black;
+		}
+	}
+
+	&.ru-button--info {
+		color: $ru-info;
+
+		&:hover {
+			background: $ru-info;
+			border-color: $ru-info;
+			color: $ru-white;
+		}
+	}
+
+	&.ru-button--light {
+		color: $ru-gray-light;
+
+		&:hover {
+			background: $ru-gray-light;
+			border-color: $ru-gray-light;
+			color: $ru-black;
+		}
+	}
+
+	&.ru-button--dark {
+		color: $ru-black;
+
+		&:hover {
+			background: $ru-black;
+			border-color: $ru-black;
+			color: $ru-white;
+		}
+	}
+}
+```
+
+## Ejemplo de Uso Real
+
+Aquí tienes un ejemplo de cómo usar los estilos de botones definidos en `_buttons.scss` en un archivo HTML:
+
+```html [expandable]
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Ejemplos de Botones</title>
+		<link
+			rel="stylesheet"
+			href="ruta/a/tu/css/compilado/styles.css" />
+	</head>
+	<body>
+		<h1>Ejemplos de Botones</h1>
+
+		<button class="ru-button ru-button--primary">Botón Primario</button>
+		<button class="ru-button ru-button--secondary">Botón Secundario</button>
+		<button class="ru-button ru-button--success">Botón de Éxito</button>
+		<button class="ru-button ru-button--danger">Botón de Peligro</button>
+		<button class="ru-button ru-button--warning">
+			Botón de Advertencia
+		</button>
+		<button class="ru-button ru-button--info">Botón de Información</button>
+		<button class="ru-button ru-button--light">Botón Claro</button>
+		<button class="ru-button ru-button--dark">Botón Oscuro</button>
+
+		<h2>Tamaños de Botones</h2>
+		<button class="ru-button ru-button--primary ru-button--sm">
+			Botón Pequeño
+		</button>
+		<button class="ru-button ru-button--primary ru-button--lg">
+			Botón Grande
+		</button>
+
+		<h2>Botón Deshabilitado</h2>
+		<button
+			class="ru-button ru-button--primary ru-button--disabled"
+			disabled>
+			Botón Deshabilitado
+		</button>
+
+		<h2>Botones con Borde</h2>
+		<button class="ru-button ru-button--outline ru-button--primary">
+			Borde Primario
+		</button>
+		<button class="ru-button ru-button--outline ru-button--secondary">
+			Borde Secundario
+		</button>
+		<button class="ru-button ru-button--outline ru-button--success">
+			Borde de Éxito
+		</button>
+		<button class="ru-button ru-button--outline ru-button--danger">
+			Borde de Peligro
+		</button>
+		<button class="ru-button ru-button--outline ru-button--warning">
+			Borde de Advertencia
+		</button>
+		<button class="ru-button ru-button--outline ru-button--info">
+			Borde de Información
+		</button>
+		<button class="ru-button ru-button--outline ru-button--light">
+			Borde Claro
+		</button>
+		<button class="ru-button ru-button--outline ru-button--dark">
+			Borde Oscuro
+		</button>
+	</body>
+</html>
+```
+
+<Note>
+	En este ejemplo, se incluyen varios tipos de botones, tamaños, un botón
+	deshabilitado y botones con borde para demostrar los diferentes estilos
+	definidos en el archivo `_buttons.scss`. Asegúrate de reemplazar
+	`ruta/a/tu/css/compilado/styles.css` con la ruta real a tu archivo CSS
+	compilado.
+</Note>

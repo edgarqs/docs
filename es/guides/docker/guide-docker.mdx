@@ -1,0 +1,124 @@
+---
+title: "Guía Completa de Docker"
+description: "Desde la instalación hasta comandos avanzados y uso con Laravel."
+icon: "docker"
+---
+
+# Guía Completa de Docker
+
+## 1. Introducción a Docker
+
+Docker es una plataforma que permite desarrollar, enviar y ejecutar aplicaciones en contenedores. Un contenedor es una unidad ligera y portátil que incluye todo lo necesario para ejecutar una aplicación.
+
+---
+
+## 2. Instalación de Docker
+
+### 2.1 Instalación en Windows y Mac
+Descarga e instala **Docker Desktop** desde [https://www.docker.com/get-started](https://www.docker.com/get-started).
+
+### 2.2 Instalación en Linux
+
+[https://docs.docker.com/desktop/setup/install/linux/ubuntu/](https://docs.docker.com/desktop/setup/install/linux/ubuntu/)
+
+---
+
+## 3. Comandos Básicos de Docker
+
+| Comando | Descripción |
+|---------|-------------|
+| `docker pull [imagen]` | Descarga una imagen desde Docker Hub |
+| `docker images` | Lista las imágenes disponibles |
+| `docker run [imagen]` | Crea y ejecuta un contenedor |
+| `docker ps` | Lista los contenedores en ejecución |
+| `docker ps -a` | Lista todos los contenedores |
+| `docker stop [id]` | Detiene un contenedor |
+| `docker rm [id]` | Elimina un contenedor |
+| `docker rmi [imagen]` | Elimina una imagen |
+
+Ejemplo:
+```bash
+docker run -d -p 8080:80 nginx
+```
+
+---
+
+## 4. Uso de Docker Compose
+
+Docker Compose permite definir y ejecutar aplicaciones multi-contenedor. 
+
+Ejemplo de `docker-compose.yml` para MySQL y Adminer:
+```yaml
+version: '3.8'
+services:
+  mysql:
+    image: mariadb:10.8.3
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - 3306:3306
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+```
+
+Para iniciar los servicios:
+```bash
+docker-compose up -d
+```
+
+Para detenerlos:
+```bash
+docker-compose down
+```
+
+---
+
+## 5. Uso de Docker con Laravel
+
+### 5.1 Configuración del `.env`
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=biblio
+DB_USERNAME=root
+DB_PASSWORD=1234
+```
+
+### 5.2 Comandos útiles
+```bash
+docker exec -it [contenedor] bash  # Acceder al contenedor
+php artisan migrate  # Ejecutar migraciones
+```
+
+---
+
+## 6. Comandos Avanzados de Docker
+
+| Comando | Descripción |
+|---------|-------------|
+| `docker logs [id]` | Ver logs de un contenedor |
+| `docker exec -it [id] bash` | Entrar a un contenedor en ejecución |
+| `docker network ls` | Ver redes disponibles |
+| `docker volume ls` | Ver volúmenes |
+| `docker build -t mi-imagen .` | Crear una imagen desde un `Dockerfile` |
+
+Ejemplo de `Dockerfile`:
+```dockerfile
+FROM php:8.1-fpm
+COPY . /app
+WORKDIR /app
+RUN docker-php-ext-install pdo_mysql
+CMD ["php-fpm"]
+```
+
+---
+
+## 7. Consejos y Buenas Prácticas
+- Usa **.dockerignore** para evitar incluir archivos innecesarios.
+- Prefiere **volúmenes** en lugar de bind mounts para persistencia de datos.
+- Mantén tus imágenes actualizadas y elimina contenedores innecesarios con `docker system prune`.
+
+🚀 ¡Ahora estás listo para usar Docker como un pro!
