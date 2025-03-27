@@ -78,6 +78,10 @@
               {
                 "group": "Docker",
                 "pages": ["es/guides/docker/guide-docker"]
+              },
+              {
+                "group": "SQL",
+                "pages": ["es/sql/sql-consultas"]
               }
             ]
           }

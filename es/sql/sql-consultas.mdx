@@ -1,0 +1,118 @@
+---
+title: 'SQL Consultas'
+description: 'Consultas de SQL'
+icon: 'database'
+---
+
+## 1. INNER JOIN
+
+**¿Qué hace?** El `INNER JOIN` devuelve solo las filas que tienen coincidencia en ambas tablas.
+
+**Ejemplo:** Imagina que tienes dos tablas: `empleados` y `departamentos`. La tabla `empleados` tiene información sobre los empleados, y la tabla `departamentos` contiene información sobre los departamentos. Quieres obtener una lista de todos los empleados junto con su respectivo departamento, pero solo aquellos empleados que están asignados a un departamento.
+
+**Tablas:**
+* `empleados`:
+    * `id_empleado`
+    * `nombre_empleado`
+    * `id_departamento`
+
+* `departamentos`:
+    * `id_departamento`
+    * `nombre_departamento`
+
+Consulta SQL:
+
+```SQL
+SELECT empleados.nombre_empleado, departamentos.nombre_departamento
+FROM empleados
+INNER JOIN departamentos ON empleados.id_departamento = departamentos.id_departamento;
+```
+
+Esto devuelve solo los empleados que tienen un departamento asignado, es decir, aquellos que tienen una coincidencia en la tabla `departamentos`.
+
+## 2. `LEFT JOIN` (o `LEFT OUTER JOIN`)
+
+**¿Qué hace?** El `LEFT JOIN` devuelve todas las filas de la tabla izquierda y las filas coincidentes de la tabla derecha. Si no hay coincidencia, se rellenan con `NULL`.
+
+**Ejemplo:** Supongamos que quieres obtener una lista de todos los empleados y sus departamentos, pero también necesitas incluir empleados que no estén asignados a ningún departamento.
+
+**Tablas:**
+* `empleados`:
+    * `id_empleado`
+    * `nombre_empleado`
+    * `id_departamento`
+
+* `departamentos`:
+    * `id_departamento`
+    * `nombre_departamento`
+
+Consulta SQL:
+
+```SQL
+SELECT empleados.nombre_empleado, departamentos.nombre_departamento
+FROM empleados
+LEFT JOIN departamentos ON empleados.id_departamento = departamentos.id_departamento;
+```
+
+Esto devuelve todos los empleados, incluso aquellos que no están asignados a ningún departamento. Para esos empleados, el campo `nombre_departamento` será `NULL`.
+
+## 3. `RIGHT JOIN` (o `RIGHT OUTER JOIN`)
+
+**¿Qué hace?** El `RIGHT JOIN` devuelve todas las filas de la tabla derecha y las filas coincidentes de la tabla izquierda. Si no hay coincidencia, se rellenan con `NULL`.
+
+**Ejemplo:** Ahora quieres obtener una lista de todos los departamentos y los empleados asignados a cada uno. Quieres asegurarte de que todos los departamentos aparezcan, incluso si no tienen empleados asignados.
+
+**Tablas:**
+* `empleados`:
+    * `id_empleado`
+    * `nombre_empleado`
+    * `id_departamento`
+
+* `departamentos`:
+    * `id_departamento`
+    * `nombre_departamento`
+
+Consulta SQL:
+
+```SQL
+SELECT empleados.nombre_empleado, departamentos.nombre_departamento
+FROM empleados
+RIGHT JOIN departamentos ON empleados.id_departamento = departamentos.id_departamento;
+```
+
+Esto devuelve todos los departamentos, incluso aquellos que no tienen empleados asignados. Para esos departamentos, el campo `nombre_empleado` será `NULL`.
+
+4. `FULL JOIN` (o `FULL OUTER JOIN`)
+
+**¿Qué hace?** El `FULL JOIN` devuelve todas las filas de ambas tablas, rellenando con `NULL` donde no hay coincidencia.
+
+**Ejemplo:** Quieres obtener una lista de todos los empleados y todos los departamentos. Esto incluye tanto empleados sin departamento como departamentos sin empleados.
+
+**Tablas:**
+* `empleados`:
+    * `id_empleado`
+    * `nombre_empleado`
+    * `id_departamento`
+
+* `departamentos`:
+    * `id_departamento`
+    * `nombre_departamento`
+
+Consulta SQL:
+
+```SQL
+SELECT empleados.nombre_empleado, departamentos.nombre_departamento
+FROM empleados
+FULL JOIN departamentos ON empleados.id_departamento = departamentos.id_departamento;
+```
+
+Esto devolverá todas las combinaciones posibles de empleados y departamentos. Si un empleado no tiene departamento asignado, su `nombre_departamento` será `NULL`. Si un departamento no tiene empleados, su `nombre_empleado` será `NULL`.
+
+## Resumen
+
+| Tipo de JOIN | Qué devuelve |
+| -------- | ------------------------------------- |
+| INNER JOIN     | Solo las filas que tienen coincidencia en ambas tablas. |
+| LEFT JOIN      | Todas las filas de la tabla izquierda, con las coincidencias de la tabla derecha (si las hay). |
+| RIGHT JOIN   | Todas las filas de la tabla derecha, con las coincidencias de la tabla izquierda (si las hay). |
+| FULL JOIN   | Todas las filas de ambas tablas, con NULL en las columnas no coincidentes. |
