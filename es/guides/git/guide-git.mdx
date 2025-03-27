@@ -1,0 +1,218 @@
+---
+title: 'Git: Comandos esenciales'
+description: 'Comandos esenciales y avanzados de Git para mejorar tu flujo de trabajo.'
+icon: 'code-branch'
+---
+
+## Configuración inicial
+
+Configurar identidad en Git:
+
+```bash
+git config --global user.name "Tu Nombre"
+git config --global user.email "tuemail@example.com"
+```
+
+Ver la configuración actual:
+
+```bash
+git config --list
+```
+
+---
+
+## Creación y gestión de repositorios
+
+Crear un nuevo repositorio:
+
+```bash
+git init
+```
+
+Clonar un repositorio existente:
+
+```bash
+git clone [URL-del-repositorio]
+```
+
+Clonar un repositorio sin historial completo (útil para deploys, ya que evita descargar todo el historial de commits y reduce el tamaño del clon):
+
+```bash
+git clone --depth=1 [URL-del-repositorio]
+```
+
+---
+
+## Trabajo con ramas
+
+Listar ramas locales y remotas:
+
+```bash
+git branch         # Listar ramas locales
+git branch -r      # Listar ramas remotas
+git branch -a      # Listar todas las ramas
+```
+
+Crear una nueva rama y cambiar a ella:
+
+```bash
+git checkout -b [nombre-rama]
+```
+
+Cambiar entre ramas:
+
+```bash
+git switch [nombre-rama]  # Alternativa moderna
+git checkout [nombre-rama] # Forma antigua
+```
+
+Eliminar una rama local:
+
+```bash
+git branch -d [nombre-rama]  # Elimina la rama solo si ya ha sido fusionada
+git branch -D [nombre-rama]  # Elimina la rama forzadamente sin importar su estado
+```
+
+Eliminar una rama remota:
+
+```bash
+git push origin --delete [nombre-rama]
+```
+
+---
+
+## Guardar cambios
+
+Añadir archivos al área de staging:
+
+```bash
+git add .          # Añadir todos los cambios
+git add [archivo]  # Añadir un archivo específico
+```
+
+Confirmar cambios con un mensaje:
+
+```bash
+git commit -m "[Mensaje descriptivo]"
+```
+
+Subir cambios al repositorio remoto:
+
+```bash
+git push origin [nombre-rama]
+```
+
+---
+
+## Actualizar cambios
+
+Obtener los cambios del repositorio remoto sin fusionar:
+
+```bash
+git fetch
+```
+
+Obtener y fusionar cambios:
+
+```bash
+git pull origin [nombre-rama]
+```
+
+---
+
+## Deshacer cambios
+
+Descartar cambios en un archivo (volver al estado del último commit):
+
+```bash
+git checkout -- [archivo]  # SOLO afecta a archivos no añadidos a staging
+```
+
+Diferencia con `git stash`:
+
+* `git checkout -- [archivo]` descarta los cambios de un archivo específico.
+* `git stash` guarda todos los cambios no confirmados para recuperarlos más tarde.
+
+Restaurar el estado anterior de un commit (mueve HEAD a otro commit y borra los cambios posteriores):
+
+```bash
+git reset --hard [commit-id]
+```
+
+Revertir un commit sin perder el historial (crea un nuevo commit que revierte los cambios de otro commit):
+
+```bash
+git revert [commit-id]
+```
+
+Para estos comandos, primero necesitas el ID del commit, que puedes obtener con:
+
+```bash
+git log --oneline
+```
+
+---
+
+## Trabajo con historiales y logs
+
+Ver el historial de commits:
+
+```bash
+git log --oneline --graph --decorate --all
+```
+
+Ver cambios en archivos antes de confirmar:
+
+```bash
+git diff  # Muestra los cambios en archivos que aún no han sido añadidos con `git add`
+```
+
+Ver cambios entre commits:
+
+```bash
+git diff [commit-id1] [commit-id2]
+```
+
+---
+
+## Fusionar y rebase
+
+Fusionar cambios de una rama en otra (mantiene el historial de commits de ambas ramas):
+
+```bash
+git merge [nombre-rama]
+```
+
+Hacer un rebase (reestructura el historial de commits para hacerlos más lineales y ordenados, útil cuando trabajas con ramas feature en proyectos colaborativos):
+
+```bash
+git rebase [nombre-rama]
+```
+
+Diferencia entre merge y rebase:
+
+* `merge` mantiene el historial de commits como está y añade un commit de merge.
+
+* ` ` mueve los commits de la rama actual sobre otra, creando un historial más limpio.
+
+---
+
+## Otros comandos útiles
+
+Eliminar un archivo del repositorio pero conservarlo localmente:
+
+```bash
+git rm --cached [archivo]
+```
+
+Cambiar el mensaje del último commit:
+
+```bash
+git commit --amend -m "Nuevo mensaje"
+```
+
+Forzar una sincronización con el repositorio remoto:
+
+```bash
+git push --force
+```

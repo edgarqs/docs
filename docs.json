@@ -27,7 +27,7 @@
             ]
           },
           {
-            "tab": "Guides",
+            "tab": "Guides - mintlify",
             "groups": [
               {
                 "group": "Get Started",
@@ -65,6 +65,19 @@
               {
                 "group": "Componentes",
                 "pages": ["es/rapidui/components/buttons"]
+              }
+            ]
+          },
+          {
+            "tab": "Guías",
+            "groups": [
+              {
+                "group": "Git: GitLab & GitHub",
+                "pages": ["es/guides/git/guide-git"]
+              },
+              {
+                "group": "Docker",
+                "pages": ["es/guides/docker/guide-docker"]
               }
             ]
           }
