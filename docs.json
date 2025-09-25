@@ -24,6 +24,10 @@
               {
                 "group": "SQL",
                 "pages": ["es/sql/sql-consultas"]
+              },
+              {
+                "group": "Laravel",
+                "pages": ["es/guides/laravel/instalacion"]
               }
             ]
           }

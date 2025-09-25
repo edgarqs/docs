@@ -1,0 +1,52 @@
+---
+title: 'Instalación'
+description: 'Instalación y creación de una aplicación con Laravel.'
+icon: 'laravel'
+---
+
+## Prerequisitos
+
+<Steps>
+  <Step title="PHP">
+    [https://www.php.net/downloads](https://www.php.net/downloads)
+  </Step>
+  <Step title="Composer">
+    [https://getcomposer.org/download/](https://getcomposer.org/download/)
+  </Step>
+  <Step title="Nodejs & npm">
+    [https://nodejs.org/es/download](https://nodejs.org/es/download)
+  </Step>
+</Steps>
+
+## Instalación
+
+Si no tienes PHP y Composer instalado, el siguiente comando instala PHP, Composer y Laravel:
+<CodeGroup>
+
+```Windows PowerShell icon="windows"
+# Run as administrator...
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://php.new/install/windows/8.4'))
+```
+
+```Linux Linux icon="linux"
+/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.4)"
+```
+
+</CodeGroup>
+
+Si ya tienes PHP y Composer instalado, instala Laravel por Composer:
+```
+composer global require laravel/installer
+```
+
+## Crear una aplicación
+
+```
+laravel new example-app
+```
+
+```
+cd example-app
+npm install && npm run build
+composer run dev
+```
