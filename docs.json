@@ -15,7 +15,7 @@
             "groups": [
               {
                 "group": "Git: GitLab & GitHub",
-                "pages": ["es/guides/git/guide-git"]
+                "pages": ["es/guides/git/guide-git", "es/guides/git/cambios-develop"]
               },
               {
                 "group": "Docker",
@@ -24,6 +24,10 @@
               {
                 "group": "SQL",
                 "pages": ["es/sql/sql-consultas"]
+              },
+              {
+                "group": "Laravel",
+                "pages": ["es/guides/laravel/instalacion"]
               }
             ]
           }
