@@ -1,0 +1,56 @@
+---
+title: "Modificación en rama bloqueada"
+description: "Guía rápida para salvar cambios hechos en develop o main por error y llevarlos a la rama correcta."
+---
+
+## 🔹 Caso 1: Cambios sin commit en `develop`
+
+1. **Guarda tus cambios actuales en `develop` o la rama donde estés (sin hacer commit allí):**
+
+```bash
+git stash
+```
+
+2. **Cámbiate a tu rama correcta:**
+
+```bash
+git checkout mi-rama
+```
+
+3. **Recupera tus cambios en tu rama:**
+
+```bash
+git stash pop
+```
+
+👉 Ahora tus cambios están en tu rama, listos para commit.
+
+
+4. **Haz commit y push con normalidad:**
+
+```bash
+git add .
+git commit -m "Lo que estabas haciendo"
+git push origin mi-rama
+```
+
+## 🔹 Caso 2: Ya hiciste commit en `develop`
+
+Si ya hiciste commit en `develop`, pero no puedes hacer push allí:
+
+1. **Desde `develop`, crea una rama nueva con esos commits:**
+
+```bash
+git checkout -b mi-rama
+```
+
+2. **Haz push de esa nueva rama y continúa trabajando:**
+
+```bash
+git push origin mi-rama
+```
+
+<Tip>Antes de empezar a trabajar, asegúrate siempre de estar en tu rama con:</Tip>
+```bash
+git status
+```
