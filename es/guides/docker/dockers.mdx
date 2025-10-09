@@ -1,0 +1,81 @@
+---
+title: "Contenedores Dockers"
+description: "Archivos para usar Dockers."
+---
+
+## MariaDB + Adminer
+
+```yml docker-compose.yml
+version: '3.8'
+services:
+  mysql:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - 3306:3306
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8080:8080
+```
+
+## Wordpress + MariaDB
+
+```yml docker-compose.yml expandable
+version: "3.9"
+
+services:
+  # Servicio de la base de datos con el nombre original 'mysql'
+  mysql:
+    image: mariadb:latest
+    restart: always
+    environment:
+      # Se establece solo la contraseña para el usuario 'root'
+      MARIADB_ROOT_PASSWORD: 1234
+      # Creamos una base de datos vacía para que WordPress la use
+      MARIADB_DATABASE: wordpress
+    volumes:
+      # El volumen para guardar los datos de la base de datos
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  # Servicio de WordPress
+  wordpress:
+    depends_on:
+      - mysql
+    image: wordpress:latest
+    restart: always
+    ports:
+      # Accede a WordPress en http://localhost:8000
+      - "8000:80"
+    environment:
+      # ✅ WordPress se conectará usando el usuario 'root' y la contraseña '1234'
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: 1234
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      # El volumen para guardar los archivos de WordPress
+      - wordpress_data:/var/www/html
+    networks:
+      - app-network
+
+  # Servicio de Adminer
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+# Se mantienen los volúmenes y la red, que son buenas prácticas
+volumes:
+  db_data:
+  wordpress_data:
+
+networks:
+  app-network:
+```

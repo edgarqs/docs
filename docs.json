@@ -19,7 +19,7 @@
               },
               {
                 "group": "Docker",
-                "pages": ["es/guides/docker/guide-docker"]
+                "pages": ["es/guides/docker/guide-docker", "es/guides/docker/dockers"]
               },
               {
                 "group": "SQL",
