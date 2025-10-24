@@ -26,6 +26,10 @@
                 "pages": ["es/sql/sql-consultas"]
               },
               {
+                "group": "VBox",
+                "pages": ["es/vbox/vbox"]
+              },
+              {
                 "group": "Laravel",
                 "pages": ["es/guides/laravel/instalacion"]
               }
