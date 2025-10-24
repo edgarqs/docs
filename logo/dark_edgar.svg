@@ -1,0 +1,14 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 177 24" width="177" height="24">
+	<defs>
+		<image  width="24" height="24" id="img1" href="data:image/png;base64,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"/>
+	</defs>
+	<style>
+		tspan { white-space:pre } 
+		.t0 { font-size: 24px;fill: #ffffff;font-weight: 500;font-family: "Poppins-Medium", "Poppins" } 
+	</style>
+	<use id="Background" href="#img1" x="0" y="0"/>
+	<text id="eDocs" style="transform: matrix(1.263,0,0,1.263,34.737,21.737)" >
+		<tspan x="0" y="0" class="t0">e</tspan><tspan  y="0" class="t0">D</tspan><tspan  y="0" class="t0">o</tspan><tspan  y="0" class="t0">c</tspan><tspan  y="0" class="t0">s
+</tspan>
+	</text>
+</svg>
