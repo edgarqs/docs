@@ -27,7 +27,7 @@
               },
               {
                 "group": "VBox",
-                "pages": ["es/vbox/vbox"]
+                "pages": ["es/guides/vbox/vbox"]
               },
               {
                 "group": "Laravel",
