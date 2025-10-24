@@ -94,7 +94,23 @@ sudo netplan apply
 
 ### Acceder por SSH
 
-```cmd
+1. Instalar y activar openssh
+
+<CodeGroup>
+
+```bash Fedora icon="fedora"
+sudo dnf update -y && sudo dnf install -y openssh-server && sudo systemctl enable sshd && sudo systemctl start sshd
+```
+
+```bash Ubuntu icon="ubuntu"
+sudo apt update && sudo apt install -y openssh-server && sudo systemctl enable ssh && sudo systemctl start ssh
+```
+
+</CodeGroup>
+
+2. Acceder desde Windows
+
+```bash Terminal Windows icon="windows"
 ssh usuario@192.168.56.101   # Fedora
 ssh usuario@192.168.56.102   # Ubuntu 1
 ssh usuario@192.168.56.103   # Ubuntu 2 (si la configuras)
