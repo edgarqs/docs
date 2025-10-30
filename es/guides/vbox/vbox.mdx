@@ -46,10 +46,20 @@ Las interfaces detectadas suelen ser:
 - `enp0s8` -> Host-Only (vacía)
 
 ```bash
-sudo nmcli con add type ethernet ifname enp0s8 con-name hostonly \
-ipv4.addresses 192.168.56.101/24 ipv4.method manual
+# 1. Crear la conexión básica sin parámetros IP
+sudo nmcli con add type ethernet ifname enp0s8 con-name hostonly
 
+# 2. Asignar IP estática
+sudo nmcli con mod hostonly ipv4.addresses 192.168.56.101/24
+sudo nmcli con mod hostonly ipv4.method manual
+
+# 3. Añadir DNS
 sudo nmcli con mod hostonly ipv4.dns "8.8.8.8 1.1.1.1"
+
+# 4. Hacer que se active automáticamente al iniciar
+sudo nmcli con mod hostonly connection.autoconnect yes
+
+# 5. Levantar la interfaz
 sudo nmcli con up hostonly
 ```
 
