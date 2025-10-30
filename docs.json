@@ -23,7 +23,7 @@
               },
               {
                 "group": "SQL",
-                "pages": ["es/sql/sql-consultas"]
+                "pages": ["es/bdd/sql-consultas", "es/bdd/mongodb" ]
               },
               {
                 "group": "VBox",
