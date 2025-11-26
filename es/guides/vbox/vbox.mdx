@@ -76,7 +76,7 @@ Las interfaces detectadas suelen ser:
 - `enp0s3` -> NAT (10.0.2.x)  
 - `enp0s8` -> Host-Only (sin IP)
 
-#### Archivo: `/etc/netplan/50-cloud-init.yaml`
+**Archivo:** `/etc/netplan/50-cloud-init.yaml`
 
 ```bash
 sudo nano /etc/netplan/50-cloud-init.yaml
@@ -100,6 +100,62 @@ Aplicar cambios:
 
 ```bash
 sudo netplan apply
+```
+
+### 🐉 Configuración en Kali Linux
+
+Las interfaces detectadas suelen ser:  
+- `enp0s3` -> NAT (10.0.2.x)  
+- `enp0s8` -> Host-Only (sin IP)
+
+1. Ver nombres de dispositivos y conexiones:
+
+```bash
+nmcli device status
+nmcli connection show
+```
+
+- `DEVICE` indica el nombre real (eth0, eth1)
+- `NAME` indica el nombre de la conexión en NetworkManager
+
+2. Configurar eth0 (NAT) con DHCP
+
+Activar el dispositivo:
+
+```bash
+sudo nmcli device connect eth0
+```
+
+Configurar la conexión para DHCP y autonexión:
+
+```bash
+sudo nmcli connection modify "Wired connection 1" ipv4.method auto
+sudo nmcli connection modify "Wired connection 1" connection.autoconnect yes
+sudo nmcli connection up "Wired connection 1"
+```
+
+> Reemplaza `"Wired connection 1"` por el nombre exacto que tengas para eth0.
+
+3. Configuración eth1 (Host-Only) con IP estática
+
+Crear la conexión manual:
+
+```bash
+sudo nmcli connection add type ethernet ifname eth1 con-name eth1-hostonly ipv4.addresses 192.168.56.104/24 ipv4.method manual
+sudo nmcli connection modify eth1-hostonly connection.autoconnect yes
+sudo nmcli connection up eth1-hostonly
+```
+
+Verifica:
+
+```bash
+ip a show eth1
+```
+
+Deberían aparecer IPs para los dos adaptadores:
+
+```bash
+ip -c a
 ```
 
 ### Acceder por SSH
