@@ -118,38 +118,23 @@ nmcli connection show
 - `DEVICE` indica el nombre real (eth0, eth1)
 - `NAME` indica el nombre de la conexión en NetworkManager
 
-2. Configurar eth0 (NAT) con DHCP
-
-Activar el dispositivo:
+2. Configurar con DHCP
 
 ```bash
-sudo nmcli device connect eth0
+sudo nano /etc/network/interfaces
 ```
 
-Configurar la conexión para DHCP y autonexión:
-
 ```bash
-sudo nmcli connection modify "Wired connection 1" ipv4.method auto
-sudo nmcli connection modify "Wired connection 1" connection.autoconnect yes
-sudo nmcli connection up "Wired connection 1"
-```
+source /etc/network/interfaces.d/*
 
-> Reemplaza `"Wired connection 1"` por el nombre exacto que tengas para eth0.
+auto lo
+iface lo inet loopback
 
-3. Configuración eth1 (Host-Only) con IP estática
+auto eth0
+iface eth0 inet dhcp
 
-Crear la conexión manual:
-
-```bash
-sudo nmcli connection add type ethernet ifname eth1 con-name eth1-hostonly ipv4.addresses 192.168.56.104/24 ipv4.method manual
-sudo nmcli connection modify eth1-hostonly connection.autoconnect yes
-sudo nmcli connection up eth1-hostonly
-```
-
-Verifica:
-
-```bash
-ip a show eth1
+auto eth1
+iface eth1 inet dhcp
 ```
 
 Deberían aparecer IPs para los dos adaptadores:
