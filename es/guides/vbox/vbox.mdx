@@ -137,6 +137,12 @@ auto eth1
 iface eth1 inet dhcp
 ```
 
+3. Aplicar la configuración de red
+
+```bash
+sudo systemctl restart networking
+```
+
 Deberían aparecer IPs para los dos adaptadores:
 
 ```bash
