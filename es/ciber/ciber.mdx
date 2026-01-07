@@ -1,0 +1,106 @@
+---
+title: "Mongo DB"
+description: "Introducción a Mongo DB"
+icon: "database"
+---
+
+## 1. MySQL vs MongoDB
+
+| Concepto              | MySQL                                            | MongoDB                                                   |
+| --------------------- | ------------------------------------------------ | --------------------------------------------------------- |
+| Tipo de base de datos | Relacional (SQL)                                 | No relacional (NoSQL, orientada a documentos)             |
+| Estructura            | Tablas con filas y columnas                      | Colecciones con documentos (JSON)                         |
+| Lenguaje              | SQL (Structured Query Language)                  | BSON (Binary JSON, se consulta con métodos y operadores)  |
+| Relaciones            | Usa _JOINs_ entre tablas                         | Se evitan JOINs; se anidan datos dentro de documentos     |
+| Esquema               | Fijo (hay que definir columnas y tipos de datos) | Flexible (cada documento puede tener estructura distinta) |
+
+## 2. Cómo guarda los datos MongoDB
+
+En lugar de tablas, Mongo tiene **colecciones**.
+Y en lugar de filas, tiene **documentos**.
+
+Un documento es básicamente un **objeto JSON** (en realidad BSON, una versión binaria optimizada).
+Por ejemplo, supongamos que en MySQL tienes una tabla `usuarios`:
+
+```sql
+CREATE TABLE usuarios (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  nombre VARCHAR(100),
+  edad INT,
+  direccion VARCHAR(255)
+);
+```
+
+En MongoDB, eso se vería así:
+
+```JSON
+{
+  _id: ObjectId("671cfd21e4a3f73e6a7b1f23"),
+  nombre: "Ana",
+  edad: 28,
+  direccion: {
+    calle: "Av. Siempre Viva 742",
+    ciudad: "Springfield"
+  }
+}
+```
+
+Fíjate que `direccion` puede ser un **objeto anidado**, algo que no podrías hacer tan fácilmente en una tabla SQL
+
+3. Consultar datos en MongoDB
+
+<CodeGroup>
+
+```sql MySQL
+SELECT nombre, edad FROM usuarios WHERE edad > 25;
+```
+
+```JSON MongoDB
+db.usuarios.find({ edad: { $gt: 25 } }, { nombre: 1, edad: 1, _id: 0 })
+```
+
+</CodeGroup>
+
+Mongo usa **operadores con** `$` (`$gt` = greater than, `$lt` = less than, etc.).
+
+# 4. Ventajas de MongoDB
+
+<Icon icon="check" iconType="solid" /> Esquema flexible — puedes cambiar la estructura
+sobre la marcha.
+
+<Icon icon="check" iconType="solid" /> Ideal para datos con forma variable o jerárquica.
+
+<Icon icon="check" iconType="solid" /> Escala fácilmente horizontalmente (replicas
+y shards).
+
+<Icon icon="check" iconType="solid" /> Muy útil para aplicaciones con JSON (Node.js,
+por ejemplo).
+
+## 5. Desventajas (comparado con MySQL)
+
+<Icon icon="xmark" iconType="solid" /> No tiene transacciones complejas tan elegantes
+como SQL (aunque ya soporta multi-document transactions).
+
+<Icon icon="xmark" iconType="solid" /> No es ideal para datos muy estructurados y
+con muchas relaciones.
+
+<Icon icon="xmark" iconType="solid" /> Menos eficiente en consultas que requieren
+joins o agregaciones complicadas.
+
+## En resumen
+
+- MySQL = estructura, orden, disciplina.
+- MongoDB = flexibilidad, libertad, caos controlado.
+
+## Uso recomendado
+
+| Tipo de app                  | MySQL | MongoDB |
+| ---------------------------- | ----- | ------- |
+| Tienda online clásica        | ✅    | ⚠️     |
+| Chat o mensajería            | ⚠️    | ✅     |
+| Sistema de contabilidad      | ✅    | ❌     |
+| Red social / foros           | ⚠️    | ✅     |
+| Dashboard en tiempo real     | ⚠️    | ✅     |
+| Blog o CMS moderno           | ⚠️    | ✅     |
+| Sistema bancario             | ✅    | ❌     |
+| App con estructura cambiante | ❌    | ✅     |
