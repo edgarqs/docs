@@ -9,53 +9,66 @@
   },
   "favicon": "/favicon_edgar.svg",
   "navigation": {
-        "tabs": [
+    "tabs": [
+      {
+        "tab": "Guías",
+        "groups": [
           {
-            "tab": "Guías",
-            "groups": [
-              {
-                "group": "Git: GitLab & GitHub",
-                "pages": ["es/guides/git/guide-git", "es/guides/git/cambios-develop"]
-              },
-              {
-                "group": "Docker",
-                "pages": ["es/guides/docker/guide-docker", "es/guides/docker/dockers"]
-              },
-              {
-                "group": "SQL",
-                "pages": ["es/bdd/sql-consultas", "es/bdd/mongodb" ]
-              },
-              {
-                "group": "VBox",
-                "pages": ["es/guides/vbox/vbox"]
-              },
-              {
-                "group": "Laravel",
-                "pages": ["es/guides/laravel/instalacion"]
-              }
+            "group": "Git: GitLab & GitHub",
+            "pages": [
+              "es/guides/git/guide-git",
+              "es/guides/git/cambios-develop"
             ]
           },
           {
-            "tab": "Ciberseguridad",
-            "groups": [
-              {
-                "group": "Ciber",
-                "pages": ["es/ciber/ciber"]
-              }
+            "group": "Docker",
+            "pages": [
+              "es/guides/docker/guide-docker",
+              "es/guides/docker/dockers"
+            ]
+          },
+          {
+            "group": "SQL",
+            "pages": [
+              "es/bdd/sql-consultas",
+              "es/bdd/mongodb"
+            ]
+          },
+          {
+            "group": "VBox",
+            "pages": [
+              "es/guides/vbox/vbox"
+            ]
+          },
+          {
+            "group": "Laravel",
+            "pages": [
+              "es/guides/laravel/instalacion"
             ]
           }
-        ],
+        ]
+      },
+      {
+        "tab": "Ciberseguridad",
+        "groups": [
+          {
+            "group": "OSINT",
+            "pages": [
+              "es/ciber/osint/google-dorks"
+            ]
+          }
+        ]
+      }
+    ],
     "global": {
-      "anchors": [
-      ]
+      "anchors": []
     }
   },
   "logo": {
     "light": "/logo/light_edgar.svg",
     "dark": "/logo/dark_edgar.svg"
   },
-  "navbar": {
-  },
+  "navbar": {},
   "footer": {
     "socials": {
       "x": "https://x.com/edgarqs_",
