@@ -1,0 +1,111 @@
+---
+title: "Google Dorks"
+description: "Apuntes y referencias de Google Dorks"
+icon: "magnifying-glass"
+---
+
+## ¿Qué es esto?
+
+Google indexa todo lo que encuentra, a veces incluso archivos que no deberían ser públicos. Usando los operadores de búsqueda avanzados (**Dorks**) podemos filtrar estos resultados para encontrar información específica.
+
+## Los operadores básicos
+
+Acuérdate de estos, son los más utilizados.
+
+| Operador | Qué hace | Ejemplo |
+| :--- | :--- | :--- |
+| `site:` | Solo busca en este dominio específico. | `site:twitter.com` |
+| `filetype:` | Solo busca este tipo de archivo. | `filetype:pdf` |
+| `inurl:` | La palabra tiene que estar en la URL. | `inurl:login` |
+| `intitle:` | La palabra tiene que estar en el título de la página. | `intitle:"index of"` |
+| `intext:` | La palabra tiene que estar en el cuerpo del texto. | `intext:"password"` |
+
+<Tip>
+  Puedes combinarlos. Por ejemplo: `site:es filetype:pdf` buscaría PDFs solo en sitios de España.
+</Tip>
+
+## Combinaciones útiles para OSINT
+
+Ejemplos de consultas comunes para investigación:
+
+<AccordionGroup>
+  <Accordion title="1. Archivos de configuración (.env, .git)">
+    Archivos de configuración expuestos accidentalmente.
+    
+    ```bash
+    filetype:env "DB_PASSWORD"
+    intitle:"index of" ".env"
+    ```
+  </Accordion>
+
+  <Accordion title="2. Paneles de Login">
+    Para ver por dónde entran los administradores o empleados.
+
+    ```bash
+    site:empresa.com inurl:admin
+    site:empresa.com inurl:login
+    intitle:"login" "admin"
+    ```
+  </Accordion>
+
+  <Accordion title="3. Directorios abiertos (Index of)">
+    Cuando el servidor lista los archivos sin querer.
+
+    ```bash
+    intitle:"index of /" "parent directory"
+    intitle:"index of /" "backup"
+    ```
+  </Accordion>
+
+  <Accordion title="4. Documentos sensibles (XLS, PDF)">
+    Fugas de información en documentos olvidados.
+
+    ```bash
+    filetype:xls intext:"password"
+    filetype:xls intext:"email"
+    ```
+  </Accordion>
+
+  <Accordion title="5. Búsqueda de Personas (SOCMINT)">
+    Rastreo de huella digital, redes sociales y contactos.
+    
+    ```bash
+    # Redes sociales
+    site:instagram.com | site:twitter.com | site:linkedin.com "nombre usuario"
+    
+    # Currículums (mucha info personal)
+    intitle:"curriculum vitae" filetype:pdf "Java"
+    
+    # Números de teléfono (formato genérico)
+    intext:"teléfono" | intext:"móvil" "Nombre Apellido"
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Medidas de protección
+
+Si quieres evitar que tu web aparezca en estos resultados:
+
+<Steps>
+  <Step title="Configura robots.txt">
+    Dile a Google qué carpetas ignorar.
+    ```txt
+    User-agent: *
+    Disallow: /admin/
+    Disallow: /conf/
+    ```
+  </Step>
+  <Step title="Usa meta tags">
+    Añade `noindex` en el `<head>` de tus páginas privadas:
+    ```html
+    <meta name="robots" content="noindex">
+    ```
+  </Step>
+  <Step title="Sentido común">
+    No subas archivos `.env` ni backups a la carpeta `public_html` o equivalente.
+  </Step>
+</Steps>
+
+<Warning>
+**Disclaimer Ético**: Buscar información pública es legal (OSINT), pero usar esa información para explotar sistemas ajenos sin permiso es delito. Úsalo solo para auditar tus propios sistemas o con autorización.
+</Warning>
