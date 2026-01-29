@@ -1,0 +1,277 @@
+---
+title: 'Bitácora y Operaciones VPS'
+sidebarTitle: 'Manual de Operaciones'
+description: 'Inventario de software, versiones y guías de despliegue para nuevos proyectos Laravel.'
+---
+
+## Inventario de Software
+
+Resumen de las versiones congeladas instaladas en el servidor.
+
+| Software | Versión Actual | Notas |
+| :--- | :--- | :--- |
+| **PHP** | `8.5.2` | Ejecutándose vía PHP-FPM. |
+| **Composer** | `2.9.4` | Gestor de dependencias PHP. |
+| **Node.js** | `18.19.1` | Entorno de ejecución JS. |
+| **NPM** | `9.2.0` | Gestor de paquetes Node. |
+| **MySQL** | `8.0 / 8.4` | Motor de base de datos principal. |
+| **Redis** | `Installed` | Servicio activo para Caché y Colas. |
+| **Supervisor** | `Installed` | Gestor de procesos para Workers. |
+| **Rclone** | `v1.xx` | **Nuevo:** Gestión de Backups en Nube (Dropbox). |
+| **Fail2Ban** | `v1.1.0` | **Nuevo:** Seguridad activa contra intrusos. |
+| **UFW** | `Active` | **Nuevo:** Firewall (Deny All Incoming). |
+
+---
+
+## 1. Estándar de Directorios
+
+Para mantener el orden, todos los proyectos web deben seguir estrictamente esta estructura de rutas:
+
+- **Ruta raíz del proyecto:** `/var/www/html/subdominio.dominio.com`
+- **Propietario de archivos:** `www-data:www-data`
+- **Permisos de carpetas:** `775` (storage/bootstrap) o `755`.
+
+---
+
+## 2. Gestión de Base de Datos (MySQL)
+
+Guía rápida para aprovisionar una base de datos para un nuevo proyecto.
+
+### Acceso
+```bash
+sudo mysql -u root -p
+```
+
+### Comandos de Aprovisionamiento
+
+Sustituye los valores entre corchetes `< >`.
+
+```sql
+-- 1. Crear base de datos
+CREATE DATABASE <nombre_db>;
+
+-- 2. Crear usuario
+CREATE USER <usuario_db> WITH PASSWORD '<password_segura>';
+
+-- 3. Asignar permisos
+GRANT ALL PRIVILEGES ON DATABASE <nombre_db> TO <usuario_db>;
+
+-- 4. Salir
+\\q
+```
+
+## 3. Desplegar Nueva Web (Nginx)
+
+### Crear configuración del sitio
+
+```bash
+sudo nano /etc/nginx/sites-available/subdominio.dominio.com
+```
+
+### Configuración estándar Laravel + PHP 8.5
+
+```nginx
+server {
+    listen 80;
+    server_name subdominio.dominio.com;
+
+    root /var/www/html/subdominio.dominio.com/public;
+    index index.php;
+
+    charset utf-8;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \\.php$ {
+        fastcgi_pass unix:/var/run/php/php8.5-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+```
+
+### Activar el sitio
+
+```bash
+sudo ln -s /etc/nginx/sites-available/subdominio.dominio.com /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### Obtener HTTPS
+
+```bash
+sudo certbot --nginx -d subdominio.dominio.com
+```
+
+## 4. Colas y Procesos (Redis + Supervisor)
+
+Las colas **NO deben ejecutarse manualmente**. Se gestionan con Supervisor.
+
+Crear worker del proyecto
+
+```bash
+sudo nano /etc/supervisor/conf.d/subdominio-worker.conf
+```
+
+```ini
+[program:subdominio-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/html/subdominio.dominio.com/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/html/subdominio.dominio.com/storage/logs/worker.log
+stopwaitsecs=3600
+```
+
+### Recargar Supervisor
+
+```bas
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start all
+```
+
+## 5. Tareas Programadas (Cron)
+
+Laravel usa **una única entrada** para gestionar todas las tareas.
+
+```bash
+sudo crontab -u www-data -e
+```
+
+Añadir:
+```bash
+* * * * * php /var/www/html/subdominio.dominio.com/artisan schedule:run >> /dev/null 2>&1
+```
+
+## Tips rápidos
+
+<AccordionGroup>
+
+  <Accordion title="Instalación inicial de un proyecto Laravel">
+    Después de clonar el repositorio:
+
+    ```bash
+    sudo composer install --no-dev --optimize-autoloader
+    sudo cp .env.example .env
+    sudo php artisan key:generate
+    ```
+
+    Ajustar permisos iniciales:
+
+    ```bash
+    sudo chown -R www-data:www-data /var/www/html/subdominio.dominio.com
+    sudo chmod -R 775 /var/www/html/subdominio.dominio.com/storage
+    sudo chmod -R 775 /var/www/html/subdominio.dominio.com/bootstrap/cache
+    ```
+  </Accordion>
+
+  <Accordion title="Ejecutar migraciones y seeders">
+    Para crear las tablas de la base de datos:
+
+    ```bash
+    sudo php artisan migrate
+    ```
+
+    Si necesitas datos de prueba:
+
+    ```bash
+    sudo php artisan db:seed
+    ```
+  </Accordion>
+
+  <Accordion title="Compilar frontend (Vite)">
+    Para proyectos con React / Vue / Vite:
+
+    ```bash
+    sudo npm install
+    sudo npm run build
+    ```
+  </Accordion>
+
+  <Accordion title="Limpiar y regenerar cachés de Laravel">
+    Cuando algo no refleja los cambios:
+
+    ```bash
+    sudo php artisan cache:clear
+    sudo php artisan config:clear
+    sudo php artisan route:clear
+    sudo php artisan view:clear
+    ```
+
+    Regenerar optimizaciones:
+
+    ```bash
+    sudo php artisan optimize
+    ```
+
+    O limpiar absolutamente todo:
+
+    ```bash
+    sudo php artisan optimize:clear
+    ```
+  </Accordion>
+
+  <Accordion title="Permisos correctos en Laravel">
+    Si aparecen errores de permisos en logs o caché:
+
+    ```bash
+    sudo chown -R www-data:www-data /var/www/html/subdominio.dominio.com
+    sudo find /var/www/html/subdominio.dominio.com -type d -exec chmod 755 {} \\;
+    sudo chmod -R 775 /var/www/html/subdominio.dominio.com/storage
+    sudo chmod -R 775 /var/www/html/subdominio.dominio.com/bootstrap/cache
+    ```
+  </Accordion>
+
+  <Accordion title="Reiniciar PHP-FPM">
+    Después de cambiar configuración de PHP:
+
+    ```bash
+    sudo systemctl restart php8.5-fpm
+    ```
+  </Accordion>
+
+  <Accordion title="Ver estado de los workers (Supervisor)">
+    Comprobar procesos activos:
+
+    ```bash
+    sudo supervisorctl status
+    ```
+  </Accordion>
+
+  <Accordion title="Reiniciar workers de Laravel">
+    Necesario tras un deploy:
+
+    ```bash
+    sudo supervisorctl restart all
+    ```
+  </Accordion>
+
+  <Accordion title="Ejecutar Laravel en modo manual (debug)">
+    Solo para pruebas puntuales (NO producción):
+
+    ```bash
+    sudo php artisan serve --host=0.0.0.0 --port=8000
+    ```
+  </Accordion>
+
+</AccordionGroup>
+
+---
+
+Guía de [Seguridad de la VPS](./security).

@@ -1,0 +1,139 @@
+---
+title: 'Seguridad de la VPS'
+---
+
+## Seguridad del Servidor (Hardening)
+
+Configuración de seguridad activa para proteger los servicios listados en el inventario.
+
+### Firewall (UFW)
+
+El servidor opera con una política de **Deny All Incoming** por defecto. Solo se permiten conexiones explícitas.
+
+| Servicio | Puerto | Acceso | Notas |
+| :--- | :--- | :--- | :--- |
+| **SSH** | `22` | IPv4/IPv6 | Acceso administrativo. Protegido por Fail2Ban. |
+| **HTTP** | `80` | `0.0.0.0/0` | Tráfico web estándar Nginx. |
+| **HTTPS** | `443` | `0.0.0.0/0` | Tráfico encriptado SSL/TLS. |
+| **MySQL** | `3306` | **Localhost** | Bloqueado al exterior. Acceso solo interno. |
+| **Redis** | `6379` | **Localhost** | Bloqueado al exterior. Evita secuestro de colas. |
+
+**Comandos de gestión:**
+
+```bash
+# Ver estado numerado
+sudo ufw status numbered
+
+# Permitir una IP específica (ej: para acceso a MySQL remoto)
+sudo ufw allow from <tu_ip_fija> to any port 3306
+```
+
+### Hacking Ético (Nginx)
+
+Se han ocultado versiones y añadido cabeceras de seguridad globales en `/etc/nginx/nginx.conf`:
+
+- `server_tokens off;` &rarr; Oculta versión de Nginx.
+- `X-Frame-Options` y `X-Content-Type-Options` &rarr; Protección XSS/Sniffing.
+
+### Prevención de Intrusos (Fail2Ban)
+
+Monitoriza logs del sistema y banea IPs sospechosas automáticamente.
+
+- Jails activas: sshd.
+- Tiempo de baneo: 10 minutos (incremental).
+
+```bash
+# Ver estado de los baneos en SSH
+sudo fail2ban-client status sshd
+
+# Desbanear una IP (si te bloqueas a ti mismo)
+sudo fail2ban-client set sshd unbanip <tu_ip>
+```
+
+### Usuarios y Permisos
+
+- **Autenticación:** Contraseña estándar (Protegida por Fail2Ban).
+
+### Mantenimiento de Seguridad
+
+Mantener Ubuntu y los paquetes actualizados es la primera línea de defensa.
+
+```bash
+# Actualizar lista y paquetes
+sudo apt update && sudo apt upgrade -y
+
+# Limpiar paquetes obsoletos
+sudo apt autoremove
+```
+
+---
+
+### Sistema de Backups (Local + Dropbox)
+
+Estrategia de respaldo automatizada cumpliendo la regla 3-2-1 (Copia en producción, copia local y copia en nube).
+
+### Estrategia de Retención
+- **Frecuencia:** Diaria (03:00 AM).
+- **Retención:** 7 días (rotación automática: lo antiguo se borra).
+- **Destinos:**
+  1. **Local:** `/var/backups/webs`
+  2. **Nube:** Dropbox (Carpeta `Backups_VPS`).
+- **Contenido:**
+  - Dumps SQL de todas las bases de datos.
+  - Archivos web completos (preservando estructura y `.env`).
+  - *Excluye:* `node_modules`, `vendor` y logs.
+
+#### Configuración Técnica
+
+**1. Script Maestro**
+Ubicación: `/usr/local/bin/backup-vps.sh`
+Este script realiza el volcado de MySQL, la compresión de archivos (buscando recursivamente el `.env` para asegurar su inclusión) y la sincronización con la nube.
+
+```bash
+# Ejecución manual en caso de emergencia o prueba
+sudo /usr/local/bin/backup-vps.sh
+```
+
+**2. Sincronización Nube (Rclone + Dropbox)**
+La configuración de Rclone se ha realizado como **root** para permitir la ejecución automática vía Cron.
+
+> **Nota Importante:**
+> Al estar configurado como root, los comandos `rclone` solo funcionarán usando `sudo`.
+> - Archivo config: `/root/.config/rclone/rclone.conf`
+> - Ver estado: `sudo rclone listremotes`
+> - Listar archivos nube: `sudo rclone ls dropbox:Backups_VPS`
+
+**3. Automatización (Cron)**
+Tarea programada en el crontab de root (`sudo crontab -e`):
+
+```bash
+0 3 * * * /usr/local/bin/backup-vps.sh >> /var/log/backup-vps.log 2>&1
+```
+
+```bash
+# Verificar tarea programada
+sudo crontab -l
+# Salida esperada: 0 3 * * * /usr/local/bin/backup-vps.sh ...
+```
+
+**4. Restauración (Disaster Recovery)**
+
+Para restaurar una web y su base de datos:
+
+1. Base de datos:
+
+    ```bash
+    gunzip < /var/backups/webs/nombre_db_FECHA.sql.gz | mysql -u root -p nombre_db
+    ```
+2. Archivos web:
+
+    ```bash
+    tar -xzf /var/backups/webs/dominio_files_FECHA.tar.gz -C /var/www/html/
+    # Importante: Reinstalar dependencias tras descomprimir
+    cd /var/www/html/dominio
+    composer install && npm install
+    ```
+
+---
+
+Volver a [Bitácora y Operaciones VPS](./bitacora).
