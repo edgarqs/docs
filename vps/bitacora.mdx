@@ -52,13 +52,11 @@ Sustituye los valores entre corchetes `< >`.
 CREATE DATABASE <nombre_db>;
 
 -- 2. Crear usuario
-CREATE USER <usuario_db> WITH PASSWORD '<password_segura>';
+CREATE USER 'nombre_usuario'@'localhost' IDENTIFIED BY 'tu_contraseña_segura';
 
 -- 3. Asignar permisos
-GRANT ALL PRIVILEGES ON DATABASE <nombre_db> TO <usuario_db>;
-
--- 4. Salir
-\\q
+GRANT ALL PRIVILEGES ON nombre_de_tu_db.* TO 'nombre_usuario'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
 ## 3. Desplegar Nueva Web (Nginx)
