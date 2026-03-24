@@ -39,12 +39,6 @@
             "pages": [
               "es/guides/vbox/vbox"
             ]
-          },
-          {
-            "group": "Laravel",
-            "pages": [
-              "es/guides/laravel/instalacion"
-            ]
           }
         ]
       },
