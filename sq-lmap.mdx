@@ -1,0 +1,128 @@
+---
+title: "SQLmap"
+---
+
+SQLmap es una de las herramientas más potentes para pruebas de penetración web. Su objetivo es automatizar el proceso de detección y explotación de fallos de inyección SQL (SQLi), permitiendo desde la extracción de datos sensibles hasta la toma de control total del servidor de base de datos y el sistema operativo subyacente.
+
+## Instalación
+
+SQLmap está desarrollado en Python y viene preinstalado en la mayoría de las distribuciones de seguridad.
+
+<CodeGroup>
+
+```text Linux
+sudo apt update
+sudo apt install sqlmap -y
+```
+
+```text macOS
+brew install sqlmap
+```
+
+```text Windows
+git clone --depth 1 [https://github.com/sqlmapproject/sqlmap.git](https://github.com/sqlmapproject/sqlmap.git) sqlmap-dev
+python sqlmap.py --help
+```
+
+</CodeGroup>
+
+## Top 10 Comandos (Guía HexSec)
+
+Estos son los comandos fundamentales para auditar bases de datos de forma efectiva:
+
+### 1. Listar Bases de Datos
+
+Enumera todas las bases de datos disponibles en el servidor afectado.
+
+```text
+sqlmap -u "[URL]" --dbs
+```
+
+### 2. Listar Tablas
+
+Muestra las tablas dentro de una base de datos específica.
+
+```text
+sqlmap -u "[URL]" -D [db_name] --tables
+```
+
+### 3. Extraer Datos (Dump)
+
+Extrae y muestra el contenido de una tabla específica.
+
+```text
+sqlmap -u "[URL]" -D [db_name] -T [table_name] --dump
+```
+
+### 4. Identificar Usuario Actual
+
+Muestra el usuario que está realizando las consultas a la base de datos.
+
+```text
+sqlmap -u "[URL]" --current-user
+```
+
+### 5. Verificar Privilegios de Administrador
+
+Comprueba si el usuario actual tiene permisos de DBA (Database Administrator).
+
+```text
+sqlmap -u "[URL]" --is-dba
+```
+
+### 6. Obtener una Shell del Sistema
+
+Intenta obtener una terminal (shell) interactiva en el sistema operativo del servidor.
+
+```text
+sqlmap -u "[URL]" --os-shell
+```
+
+### 7. Modo Automático (Batch)
+
+Responde automáticamente "sí" a todas las preguntas del programa durante el escaneo.
+
+```text
+sqlmap -u "[URL]" --batch
+```
+
+### 8. Uso de Proxy (Burp Suite)
+
+Enruta el tráfico a través de un proxy para inspeccionar las peticiones.
+
+```text
+sqlmap -u "[URL]" --proxy=[http://127.0.0.1:8080](http://127.0.0.1:8080)
+```
+
+### 9. Cargar Petición HTTP desde Archivo
+
+Ideal para inyecciones complejas (como las de tipo POST) capturadas previamente.
+
+```text
+sqlmap -r request.txt
+```
+
+### 10. Limpiar Sesión
+
+Borra los datos de la sesión anterior para forzar un nuevo escaneo fresco.
+
+```text
+sqlmap --flush-session
+```
+
+## Técnicas de Inyección Soportadas
+
+SQLmap es extremadamente versátil y soporta múltiples métodos:
+
+- **Boolean-based blind**: Basada en respuestas Verdadero/Falso.
+- **Error-based**: Basada en los mensajes de error del servidor.
+- **UNION query-based**: Inyecta sentencias UNION para extraer datos directamente.
+- **Stacked queries**: Permite ejecutar múltiples sentencias SQL en una sola petición.
+- **Time-based blind**: Basada en retardos de tiempo en la respuesta del servidor.
+
+## Recomendaciones de Seguridad
+
+- **Uso Ético**: No utilices SQLmap contra sitios web sin autorización explícita. La inyección SQL es una de las vulnerabilidades más críticas y su explotación no autorizada es un delito grave.
+- **WAF/IDS**: Muchos cortafuegos de aplicaciones web (WAF) detectan los patrones de SQLmap fácilmente. Usa parámetros de `tamper` o retardos si el objetivo tiene protecciones activas.
+
+_Contenido adaptado de la guía "Hacking Kali" por HexSec._

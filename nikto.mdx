@@ -1,0 +1,124 @@
+---
+title: "Nikto"
+---
+
+Nikto es un escáner de servidores web de código abierto que realiza pruebas exhaustivas contra elementos múltiples, incluyendo más de 6,700 archivos o programas potencialmente peligrosos, versiones desactualizadas de servidores y problemas específicos de configuración. Es una herramienta ideal para evaluaciones iniciales rápidas de aplicaciones web.
+
+## Instalación
+
+Nikto está basado en Perl y se encuentra disponible en los repositorios oficiales de la mayoría de las distribuciones de seguridad.
+
+\<CodeGroup\>
+
+<CodeGroup>
+
+```text Linux
+sudo apt update
+sudo apt install nikto -y
+```
+
+```text macOS
+brew install nikto
+```
+
+```text Windows
+docker pull sulo/nikto
+```
+
+</CodeGroup>
+
+## Top 10 Comandos (Guía HexSec)
+
+Estos son los comandos esenciales para auditar servidores web de manera efectiva:
+
+### 1. Escaneo Estándar
+
+Realiza un análisis básico de vulnerabilidades en el host especificado.
+
+```text
+nikto -h [URL]
+```
+
+### 2. Escaneo con SSL/HTTPS
+
+Fuerza el uso de conexiones seguras durante el escaneo.
+
+```text
+nikto -h [URL] -ssl
+```
+
+### 3. Escaneo de Puertos Específicos
+
+Permite definir puertos personalizados si el servidor no corre en los puertos estándar (80/443).
+
+```text
+nikto -h [URL] -p 80,443,8080
+```
+
+### 4. Enfoque en Vulnerabilidades XSS
+
+Ajusta el escaneo para centrarse específicamente en vulnerabilidades de Cross-Site Scripting.
+
+```text
+nikto -h [URL] -Tuning 4
+```
+
+### 5. Técnicas de Evasión
+
+Utiliza métodos básicos de evasión para intentar saltar detecciones de IDS o WAF.
+
+```text
+nikto -h [URL] -evasion 1
+```
+
+### 6. Exportar Resultados a HTML
+
+Genera un informe detallado en formato HTML para su revisión posterior.
+
+```text
+nikto -h [URL] -output report.html -Format html
+```
+
+### 7. Modo Verboso
+
+Muestra información detallada de cada prueba realizada durante el escaneo.
+
+```text
+nikto -h [URL] -Display V
+```
+
+### 8. Escaneo con Autenticación
+
+Permite auditar áreas protegidas mediante autenticación básica HTTP.
+
+```text
+nikto -h [URL] -id admin:password
+```
+
+### 9. Actualizar Base de Datos
+
+Mantiene actualizados los plugins y la base de datos de vulnerabilidades de Nikto.
+
+```text
+nikto -update
+```
+
+### 10. Limitar el Tiempo de Escaneo
+
+Define una duración máxima para el proceso de escaneo.
+
+```text
+nikto -h [URL] -maxtime 60s
+```
+
+## Recomendaciones de Uso
+
+- **Ruido en la red**: Nikto es una herramienta conocida por ser muy "ruidosa" y fácil de detectar por sistemas de detección de intrusos (IDS).
+- **Complemento**: Se recomienda usar Nikto junto con otras herramientas como **Nmap** para descubrimiento de puertos y **Burp Suite** para análisis manual profundo.
+- **Actualización**: Siempre ejecute `nikto -update` antes de comenzar una nueva auditoría para asegurar que cuenta con las últimas firmas de vulnerabilidades.
+
+<Info>
+  **Aviso**: Realizar escaneos con Nikto sin autorización previa puede ser considerado un ataque. Utilice esta herramienta de manera ética y responsable.
+</Info>
+
+_Contenido adaptado de la guía "Hacking Kali" por HexSec._

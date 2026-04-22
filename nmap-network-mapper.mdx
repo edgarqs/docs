@@ -1,0 +1,133 @@
+---
+title: "Nmap (Network Mapper)"
+---
+
+Nmap es el estándar de la industria para el escaneo de redes. Es capaz de descubrir dispositivos activos, identificar puertos abiertos y detectar servicios (con sus versiones) y sistemas operativos en cualquier red. Es la herramienta de reconocimiento inicial por excelencia para cualquier pentester.
+
+## Instalación
+
+Nmap está disponible para prácticamente cualquier sistema operativo. Selecciona tu plataforma para ver las instrucciones:
+
+<CodeGroup>
+
+```text Linux
+sudo apt update
+sudo apt install nmap -y
+```
+
+```text macOS
+brew install nmap
+```
+
+```text Windows
+# Descarga el instalador (.exe) desde la web oficial
+# [https://nmap.org/download.html](https://nmap.org/download.html)
+```
+
+</CodeGroup>
+
+## Conceptos Básicos
+
+Antes de lanzar comandos, es importante entender los parámetros más comunes:
+
+- `-sS` (TCP SYN Scan): Rápido y sigiloso, no completa la conexión TCP.
+- `-sV` (Version Detection): Intenta determinar la versión del servicio que corre en el puerto.
+- `-O` (OS Detection): Intenta identificar el sistema operativo del objetivo.
+- `-T[0-5]`: Ajusta la velocidad del escaneo (0 es muy lento, 5 es extremadamente rápido/agresivo).
+
+## Top 10 Comandos (Guía HexSec)
+
+Estos son los comandos esenciales utilizados por profesionales, extraídos directamente de la hoja de trucos de HexSec:
+
+### 1. Escaneo Agresivo Completo
+
+Detecta sistema operativo, versiones de servicios y ejecuta scripts de detección básicos.
+
+```text
+nmap -A -T4 [Target_IP]
+```
+
+### 2. Escaneo Sigiloso (Stealth SYN)
+
+Utilizado para intentar evadir firewalls mediante paquetes SYN incompletos.
+
+```text
+nmap -sS -Pn [Target_IP]
+```
+
+### 3. Escaneo de Puertos UDP
+
+Ideal para encontrar servicios como DNS, SNMP o DHCP que no usan TCP.
+
+```text
+nmap -sU [Target_IP]
+```
+
+### 4. Escaneo de Todos los Puertos
+
+Por defecto, Nmap solo escanea los 1000 puertos más conocidos. Este comando fuerza el escaneo de los 65,535 puertos.
+
+```text
+nmap -p- [Target_IP]
+```
+
+### 5. Escaneo de Vulnerabilidades
+
+Utiliza el motor de scripts de Nmap (NSE) para buscar fallos conocidos.
+
+```text
+nmap --script vuln [Target_IP]
+```
+
+### 6. Barrido de Red (Ping Sweep)
+
+Encuentra todos los hosts vivos en una subred sin realizar un escaneo de puertos.
+
+```text
+nmap -sn 192.168.1.0/24
+```
+
+### 7. Detección de Sistema Operativo
+
+```text
+nmap -O [Target_IP]
+```
+
+### 8. Escaneo desde una Lista de Objetivos
+
+Útil cuando tienes múltiples direcciones IP en un archivo de texto.
+
+```text
+nmap -iL objetivos.txt
+```
+
+### 9. Exportación de Resultados
+
+Guarda el resultado en tres formatos diferentes (normal, XML y grepable) para análisis posterior.
+
+```text
+nmap -oA reporte_final [Target_IP]
+```
+
+### 10. Trazado de Ruta (Traceroute)
+
+Muestra el camino que siguen los paquetes hasta el objetivo.
+
+```text
+nmap --traceroute [Target_IP]
+```
+
+## Estrategia de Escaneo Recomendada
+
+Para un pentest profesional, se recomienda seguir este flujo:
+
+1. **Descubrimiento inicial**: `nmap -sn [Red]/24` para ver qué equipos están encendidos.
+2. **Enumeración rápida**: `nmap -sS -T4 [IP]` para ver puertos comunes.
+3. **Análisis profundo**: Una vez identificados los puertos, usar `nmap -sC -sV -p[Puertos] [IP]` para obtener versiones y ejecutar scripts por defecto.
+4. **Búsqueda de vulnerabilidades**: `nmap --script vuln [IP]`.
+
+<Info>
+  **Nota de seguridad**: Siempre realiza tus escaneos con autorización. El uso de Nmap en redes ajenas sin permiso puede ser detectado por sistemas IDS/IPS y es ilegal en muchos países.
+</Info>
+
+_Contenido adaptado de la guía "Hacking Kali" por HexSec._

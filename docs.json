@@ -44,19 +44,44 @@
       },
       {
         "tab": "Ciberseguridad",
-        "groups": [
+        "pages": [
           {
             "group": "OSINT",
             "pages": [
-              "es/ciber/osint/google-dorks"
+              "es/ciber/osint/google-dorks",
+              "es/ciber/osint/dnsenum"
+            ]
+          },
+          {
+            "group": "Análisis de Redes",
+            "pages": [
+              "nmap-network-mapper",
+              "wireshark-tshark"
+            ]
+          },
+          {
+            "group": "Seguridad Web",
+            "pages": [
+              "sq-lmap",
+              "nikto"
+            ]
+          },
+          {
+            "group": "Password Cracking",
+            "pages": [
+              "john-the-ripper",
+              "hashcat"
+            ]
+          },
+          {
+            "group": "Explotación",
+            "pages": [
+              "metasploit-framework"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": []
-    }
+    ]
   },
   "logo": {
     "light": "/logo/light_edgar.svg",

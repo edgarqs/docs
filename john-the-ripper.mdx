@@ -1,0 +1,125 @@
+---
+title: "John the Ripper"
+---
+
+John the Ripper es una herramienta de cracking de contraseñas offline de código abierto. Es ampliamente utilizada por auditores de seguridad para probar la fortaleza de las contraseñas mediante ataques de diccionario, mutaciones basadas en reglas y métodos de fuerza bruta. Soporta cientos de formatos de hash, desde archivos comprimidos (ZIP/RAR) hasta contraseñas de sistemas Linux y Windows.
+
+## Instalación
+
+John the Ripper suele venir preinstalado en Kali Linux. Para otros sistemas, puedes usar los siguientes métodos:
+
+<CodeGroup>
+
+```text Linux
+sudo apt update
+sudo apt install john -y
+```
+
+```text macOS
+brew install john-the-ripper
+```
+
+```text Windows
+# Para la versión "Jumbo" con más soporte de formatos
+git clone [https://github.com/openwall/john](https://github.com/openwall/john) -b bleeding-jumbo john
+cd john/src
+./configure && make -s clean && make -s
+```
+
+</CodeGroup>
+
+## Top 10 Comandos (Guía HexSec)
+
+Estos son los comandos esenciales para realizar auditorías de contraseñas de manera profesional:
+
+### 1. Ataque de Diccionario
+
+Ejecuta un ataque utilizando una lista de palabras predefinida (como `rockyou.txt`).
+
+```text
+john --wordlist=rockyou.txt hashes.txt
+```
+
+### 2. Mostrar Contraseñas Crackeadas
+
+Muestra los resultados de las contraseñas que ya han sido descifradas con éxito.
+
+```text
+john --show hashes.txt
+```
+
+### 3. Extraer Hash de Archivos ZIP
+
+Utilidad para obtener el hash de un archivo ZIP protegido para poder crackearlo después.
+
+```text
+zip2john archivo.zip > hash.txt
+```
+
+### 4. Combinar Archivos de Sistema (Unshadow)
+
+Combina los archivos `/etc/passwd` y `/etc/shadow` de Linux para poder auditarlos.
+
+```text
+unshadow /etc/passwd /etc/shadow > hashes.txt
+```
+
+### 5. Especificar Formato de Hash
+
+Fuerza a John a usar un formato específico, como hashes de Windows NT.
+
+```text
+john --format=NT hashes.txt
+```
+
+### 6. Uso de Reglas de Mutación
+
+Aplica reglas predefinidas para modificar las palabras del diccionario (ej: añadir números o cambiar letras por símbolos).
+
+```text
+john --rules hashes.txt
+```
+
+### 7. Ataque de Fuerza Bruta (Incremental)
+
+Intenta todas las combinaciones posibles de caracteres de forma progresiva.
+
+```text
+john --incremental hashes.txt
+```
+
+### 8. Verificar Progreso
+
+Muestra el estado actual, el tiempo transcurrido y la velocidad de la sesión de cracking.
+
+```text
+john --status
+```
+
+### 9. Reanudar Sesión
+
+Permite continuar un proceso de cracking que fue interrumpido previamente.
+
+```text
+john --restore
+```
+
+### 10. Modo Single Crack
+
+Prueba variaciones basadas únicamente en la información de los nombres de usuario (muy rápido).
+
+```text
+john --single hashes.txt
+```
+
+## Recomendaciones de Uso
+
+- **Listas de palabras**: La eficacia de John depende en gran medida de la calidad de tus diccionarios. Usa siempre listas actualizadas como `rockyou.txt`.
+- **Hardware**: Aunque John es eficiente con la CPU, para hashes complejos o ataques masivos, considera herramientas que usen GPU como **Hashcat**.
+- **Fase de Auditoría**: Utiliza `unshadow` siempre que audites sistemas Linux para asegurarte de que tienes toda la información necesaria del hash.
+
+<Info>
+  **Aviso**: El descifrado de contraseñas solo debe realizarse sobre archivos de los que seas propietario o tengas permiso explícito para auditar. El acceso no autorizado es ilegal.
+</Info>
+
+_Contenido adaptado de la guía "Hacking Kali" por HexSec._

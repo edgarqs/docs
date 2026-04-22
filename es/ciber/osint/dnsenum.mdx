@@ -1,0 +1,111 @@
+---
+title: "Dnsenum"
+---
+
+Dnsenum es un script multihilo de Perl diseñado para recopilar información de DNS de un dominio objetivo. Es una herramienta fundamental en la fase de reconocimiento, ya que permite descubrir subdominios, servidores de correo (MX), servidores de nombres (NS) y rangos de direcciones IP internas, expandiendo significativamente la superficie de ataque identificada.
+
+## Instalación
+
+Dnsenum viene preinstalado en Kali Linux. Si necesitas instalarlo en otros entornos basados en Debian o desde el repositorio:
+
+```text
+sudo apt update
+sudo apt install dnsenum -y
+```
+
+## Top 10 Comandos (Guía HexSec)
+
+Estos son los comandos clave para realizar una enumeración de DNS completa y profesional:
+
+### 1. Enumeración Automática Completa
+
+Realiza un escaneo estándar que incluye NS, MX y transferencia de zona.
+
+```text
+dnsenum [dominio]
+```
+
+### 2. Enumeración Exhaustiva
+
+Atajo para realizar una enumeración más detallada y completa.
+
+```text
+dnsenum --enum [dominio]
+```
+
+### 3. Fuerza Bruta de Subdominios
+
+Utiliza la lista interna de la herramienta para intentar adivinar subdominios activos.
+
+```text
+dnsenum --brute [dominio]
+```
+
+### 4. Diccionario Personalizado
+
+Permite usar un archivo de texto propio (como los de SecLists) para la fuerza bruta.
+
+```text
+dnsenum -f subdomains.txt [dominio]
+```
+
+### 5. Ajuste de Hilos (Velocidad)
+
+Aumenta la concurrencia para acelerar los escaneos en dominios grandes.
+
+```text
+dnsenum --threads 10 [dominio]
+```
+
+### 6. Consulta WHOIS
+
+Realiza una búsqueda WHOIS para obtener información del registro del dominio.
+
+```text
+dnsenum -w [dominio]
+```
+
+### 7. Exportación a XML
+
+Guarda todos los resultados del escaneo en un archivo XML para procesarlos con otras herramientas.
+
+```text
+dnsenum -o output.xml [dominio]
+```
+
+### 8. Scraping de Google
+
+Intenta extraer subdominios analizando las páginas de resultados de búsqueda de Google.
+
+```text
+dnsenum --pages 3 [dominio]
+```
+
+### 9. Servidor DNS Específico
+
+Fuerza a la herramienta a utilizar un servidor DNS concreto para las consultas.
+
+```text
+dnsenum --dnsserver [IP] [dominio]
+```
+
+### 10. Comprobación de IPs Privadas
+
+Busca y reporta direcciones IP que pertenezcan a rangos privados (RFC 1918).
+
+```text
+dnsenum --private [dominio]
+```
+
+## Flujo de Trabajo Recomendado
+
+1. **Enumeración Pasiva**: Comienza con `dnsenum [dominio]` para obtener registros públicos sin alertar demasiado.
+2. **Expansión**: Si no hay transferencia de zona (AXFR), procede con `--brute` para encontrar subdominios ocultos.
+3. **Identificación de Infraestructura**: Revisa los registros MX y NS para entender dónde se aloja el correo y quién gestiona el DNS.
+4. **Análisis de Red**: Usa `--private` para identificar si el DNS está filtrando información de la red interna.
+
+<Info>
+  **Sugerencia**: Muchas empresas bloquean las transferencias de zona (AXFR). Si el comando inicial falla en ese paso, no te detengas; la fuerza bruta de subdominios suele ser mucho más efectiva en entornos modernos.
+</Info>
+
+_Contenido adaptado de la guía "Hacking Kali" por HexSec._

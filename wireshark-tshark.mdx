@@ -1,0 +1,133 @@
+---
+title: "Wireshark / Tshark"
+---
+
+Wireshark es el analizador de protocolos de red más importante del mundo. Permite capturar y diseccionar el tráfico de red en tiempo real, proporcionando una visión profunda de cada paquete. **Tshark** es su contraparte de línea de comandos (CLI), ideal para análisis remotos o automatización mediante scripts.
+
+## Instalación
+
+Tshark suele venir incluido con Wireshark, pero en sistemas Linux puede requerir una instalación específica:
+
+<CodeGroup>
+
+```text Linux
+sudo apt update
+sudo apt install tshark -y
+```
+
+```text macOS
+brew install wireshark
+```
+
+```text Windows
+# Descarga el instalador desde la web oficial
+# Incluye la opción de Tshark en la instalación
+# [https://www.wireshark.org/download.html](https://www.wireshark.org/download.html)
+```
+
+</CodeGroup>
+
+<Warning>
+  Durante la instalación en Linux, se te preguntará si los usuarios no superusuarios deben poder capturar paquetes. Selecciona **Sí** y añade tu usuario al grupo `wireshark` con: `sudo usermod -aG wireshark $USER`.
+</Warning>
+
+## Top 10 Comandos (Guía HexSec)
+
+Estos son los comandos de **Tshark** más utilizados para análisis rápido y forense de red:
+
+### 1. Capturar y Guardar Tráfico
+
+Captura el tráfico de una interfaz específica y lo guarda en un archivo `.pcap`.
+
+```text
+tshark -i eth0 -w captura.pcap
+```
+
+### 2. Filtrar Peticiones HTTP
+
+Lee un archivo guardado y filtra solo las solicitudes HTTP.
+
+```text
+tshark -r capture.pcap -Y "http.request"
+```
+
+### 3. Modo Verboso (Detallado)
+
+Muestra los detalles completos de cada paquete capturado.
+
+```text
+tshark -V
+```
+
+### 4. Filtro de Captura por Puerto
+
+Captura únicamente el tráfico que pasa por el puerto 80 (HTTP).
+
+```text
+tshark -f "tcp port 80"
+```
+
+### 5. Límite de Paquetes
+
+Detiene la captura automáticamente después de alcanzar un número determinado de paquetes.
+
+```text
+tshark -c 100 -i eth0
+```
+
+### 6. Estadísticas de Jerarquía de Protocolos
+
+Muestra un resumen estadístico de qué protocolos están consumiendo más ancho de banda.
+
+```text
+tshark -z io,phs
+```
+
+### 7. Extraer Direcciones IP (Campos específicos)
+
+Extrae únicamente las IPs de origen y destino del tráfico capturado.
+
+```text
+tshark -T fields -e ip.src -e ip.dst
+```
+
+### 8. Filtrar por Dirección IP Específica
+
+Muestra únicamente el tráfico relacionado con una IP concreta.
+
+```text
+tshark -Y "ip.addr == 192.168.1.1"
+```
+
+### 9. Mostrar Datos en Hexadecimal y ASCII
+
+Muestra el contenido crudo (payload) de los paquetes.
+
+```text
+tshark -x
+```
+
+### 10. Desactivar Resolución de Nombres
+
+Acelera el análisis al no intentar resolver IPs a nombres de dominio (DNS).
+
+```text
+tshark -n
+```
+
+## Filtros de Visualización Comunes
+
+A diferencia de los filtros de captura, los filtros de visualización (`-Y`) permiten analizar datos ya capturados:
+
+- **TCP/UDP**: `tcp` o `udp`
+- **Puertos**: `tcp.port == 443`
+- **Banderas TCP**: `tcp.flags.syn == 1` (Busca intentos de conexión)
+- **Errores**: `tcp.analysis.flags` (Identifica retransmisiones o problemas de red)
+
+## Recomendaciones de Uso
+
+1. **Captura ligera**: Usa filtros de captura (`-f`) para evitar archivos `.pcap` masivos que ralenticen el análisis.
+2. **Análisis remoto**: Usa Tshark vía SSH para monitorizar servidores sin necesidad de una interfaz gráfica (GUI).
+3. **Privacidad**: Sé consciente de que capturar tráfico en redes públicas puede exponer datos sensibles; utiliza siempre esta herramienta con responsabilidad ética.
+
+_Contenido adaptado de la guía "Hacking Kali" por HexSec._

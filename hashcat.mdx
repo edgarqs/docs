@@ -1,0 +1,131 @@
+---
+title: "Hashcat"
+---
+
+Hashcat es conocida como la herramienta de recuperación de contraseñas más rápida del mundo. A diferencia de John the Ripper, que se centra en la versatilidad de la CPU, Hashcat está optimizada para aprovechar la potencia de procesamiento paralelo de las tarjetas gráficas (GPU). Soporta cientos de tipos de hash y diversos modos de ataque, lo que la hace indispensable para auditorías de contraseñas a gran escala.
+
+## Instalación
+
+Hashcat requiere controladores (drivers) de GPU actualizados (OpenCL, CUDA o Metal) para funcionar a su máxima capacidad.
+
+<CodeGroup>
+
+```text Linux
+sudo apt update
+sudo apt install hashcat -y
+```
+
+```text macOS
+brew install hashcat
+```
+
+```text Windows
+# Descarga los binarios compilados desde la web oficial
+# [https://hashcat.net/hashcat/](https://hashcat.net/hashcat/)
+```
+
+</CodeGroup>
+
+## Top 10 Comandos (Guía HexSec)
+
+Estos son los comandos fundamentales para liberar el poder de Hashcat:
+
+### 1. Crackear Hashes MD5
+
+El ataque básico utilizando una lista de palabras (wordlist).
+
+```text
+hashcat -m 0 hash.txt wordlist.txt
+```
+
+### 2. Crackear Hashes NTLM (Windows)
+
+Ideal para auditorías de directorios activos o máquinas Windows locales.
+
+```text
+hashcat -m 1000 hash.txt wordlist.txt
+```
+
+### 3. Fuerza Bruta Simple
+
+Ataque de máscara para contraseñas de 4 caracteres en minúsculas.
+
+```text
+hashcat -a 3 hash.txt ?l?l?l?l
+```
+
+### 4. Información de Dispositivos
+
+Muestra información sobre las GPUs detectadas y sus capacidades.
+
+```text
+hashcat -I
+```
+
+### 5. Benchmark de Sistema
+
+Realiza una prueba de velocidad para saber cuántos hashes por segundo puede procesar tu hardware.
+
+```text
+hashcat -b
+```
+
+### 6. Mostrar Contraseñas Crackeadas
+
+Muestra los resultados de las contraseñas que ya han sido descifradas en sesiones anteriores.
+
+```text
+hashcat --show hash.txt
+```
+
+### 7. Crackear WPA/WPA2 (Wi-Fi)
+
+Utilizado para descifrar handshakes de redes inalámbricas capturados previamente.
+
+```text
+hashcat -m 2500 wpa.hccapx wordlist.txt
+```
+
+### 8. Ataque de Combinación
+
+Combina palabras de dos listas diferentes para crear nuevas variaciones.
+
+```text
+hashcat -a 1 hash.txt list1.txt list2.txt
+```
+
+### 9. Crackear SHA512 (Linux)
+
+Específico para los hashes de contraseñas modernas en sistemas basados en Unix.
+
+```text
+hashcat -m 1800 hash.txt wordlist.txt
+```
+
+### 10. Consultar Estado de Sesión
+
+Verifica el progreso, la temperatura de la GPU y el tiempo estimado de una sesión activa.
+
+```text
+hashcat --session mysession --status
+```
+
+## Modos de Ataque Principales
+
+Hashcat utiliza el parámetro `-a` para definir la estrategia:
+
+- `-a 0 `**(Straight)**: Ataque de diccionario puro.
+- `-a 1 `**(Combination)**: Combina palabras de múltiples diccionarios.
+- `-a 3 `**(Brute-force)**: Usa máscaras (ej: `?u` para mayúsculas, `?d` para dígitos).
+
+## Recomendaciones de Hardware y Seguridad
+
+- **Refrigeración**: El cracking por GPU genera una cantidad masiva de calor. Asegúrate de que tu sistema tenga una ventilación adecuada.
+- **Drivers**: Mantén siempre actualizados los drivers de tu tarjeta de video para evitar errores de computación.
+- **Reglas**: Al igual que John, puedes usar archivos de reglas (`.rule`) para aplicar mutaciones complejas a tus diccionarios.
+
+<Info>
+  **Aviso**: Hashcat es una herramienta extremadamente potente. Úsala únicamente para fines de auditoría profesional y con el consentimiento explícito del propietario de los datos.
+</Info>
+
+_Contenido adaptado de la guía "Hacking Kali" por HexSec._
